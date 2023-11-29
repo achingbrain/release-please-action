@@ -48,6 +48,7 @@ function getManifestInput () {
 }
 
 async function runManifest (command) {
+  console.info('run manifest', command)
   // Create the Manifest and GitHub instance from
   // argument provided to GitHub action:
   const { fork } = getGitHubInput()
@@ -74,7 +75,8 @@ async function runManifest (command) {
       manifestOpts.manifestFile,
       {
         signoff,
-        fork
+        fork,
+        logger: new CheckpointLogger(true, true)
       }
     )
   }
