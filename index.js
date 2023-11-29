@@ -1,5 +1,8 @@
 const core = require('@actions/core')
-const { CheckpointLogger } = require('release-please/build/src/util/logger')
+const { CheckpointLogger, setLogger } = require('release-please/build/src/util/logger')
+
+setLogger(new CheckpointLogger(true, true))
+
 const { GitHub } = require('release-please/build/src/github')
 const { Manifest } = require('release-please/build/src/manifest')
 
@@ -48,7 +51,6 @@ function getManifestInput () {
 }
 
 async function runManifest (command) {
-  console.info('run manifest', command)
   // Create the Manifest and GitHub instance from
   // argument provided to GitHub action:
   const { fork } = getGitHubInput()
@@ -62,8 +64,7 @@ async function runManifest (command) {
     manifestOpts.manifestFile,
     {
       signoff,
-      fork,
-      logger: new CheckpointLogger(true, true)
+      fork
     }
   )
   if (command !== 'manifest-pr') {
@@ -75,8 +76,7 @@ async function runManifest (command) {
       manifestOpts.manifestFile,
       {
         signoff,
-        fork,
-        logger: new CheckpointLogger(true, true)
+        fork
       }
     )
   }
