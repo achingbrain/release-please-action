@@ -1,4 +1,5 @@
 const core = require('@actions/core')
+const { CheckpointLogger } = require('release-please/build/src/util/logger')
 const { GitHub } = require('release-please/build/src/github')
 const { Manifest } = require('release-please/build/src/manifest')
 
@@ -52,6 +53,7 @@ async function runManifest (command) {
   const { fork } = getGitHubInput()
   const manifestOpts = getManifestInput()
   const github = await getGitHubInstance()
+
   let manifest = await Manifest.fromManifest(
     github,
     github.repository.defaultBranch,
@@ -59,7 +61,8 @@ async function runManifest (command) {
     manifestOpts.manifestFile,
     {
       signoff,
-      fork
+      fork,
+      logger: new CheckpointLogger(true, true)
     }
   )
   if (command !== 'manifest-pr') {
